@@ -1,0 +1,31 @@
+create database task6;
+use task6;
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    marks int
+);
+CREATE TABLE student_log (
+    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    action VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+DELIMITER //
+CREATE TRIGGER after_student_insert
+AFTER INSERT ON students
+FOR EACH ROW
+BEGIN
+    INSERT INTO student_log(student_id, action)
+    VALUES (NEW.id, 'INSERT');
+END;
+//
+DELIMITER ;
+INSERT INTO students (name, marks)
+VALUES ('Tarun', 98);
+SELECT * FROM student_log;
+CREATE VIEW passed_students AS
+SELECT name, marks
+FROM students
+WHERE marks >= 50;
+SELECT * FROM passed_students;
